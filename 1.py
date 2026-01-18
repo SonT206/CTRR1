@@ -145,24 +145,21 @@ for u, v in st.session_state.graph.edges():
     )
 
 net.set_options("""
-var options = {
-  interaction: { hover: true },
-  manipulation: {
-    enabled: true,
-    addNode: function (data, callback) {
-      data.label = data.id;
-      callback(data);
-    },
-    addEdge: function (data, callback) {
-      if (data.from === data.to) return;
-      callback(data);
-    },
-    deleteNode: true,
-    deleteEdge: true
+{
+  "interaction": {
+    "hover": true,
+    "multiselect": true
   },
-  physics: { enabled: false }
+  "manipulation": {
+    "enabled": true
+  },
+  "physics": {
+    "enabled": false
+  }
 }
 """)
 
+
 html = net.generate_html()
 st.components.v1.html(html, height=780)
+
