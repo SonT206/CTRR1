@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+  <style>
+    html, body, #mynetwork {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: white;
+    }
+  </style>
+</head>
+<body>
+<div id="mynetwork"></div>
+
+<script>
+let nodes = new vis.DataSet([]);
+let edges = new vis.DataSet([]);
+let nodeCount = 0;
+let selectedNode = null;
+
+let network = new vis.Network(
+  document.getElementById("mynetwork"),
+  { nodes, edges },
+  {
+    physics: false,
+    interaction: { multiselect: false },
+    nodes: {
+      shape: "ellipse",
+      color: { background: "#9ecbff", border: "#4a90e2" }
+    },
+    edges: {
+      color: "#4a90e2",
+      width: 2
+    }
+  }
+);
+
+/* CLICK TRỐNG → TẠO NODE */
+network.on("click", function (params) {
+  if (params.nodes.length === 0) {
+    nodes.add({
+      id: nodeCount,
+      label: nodeCount.toString(),
+      x: params.pointer.canvas.x,
+      y: params.pointer.canvas.y
+    });
+    nodeCount++;
+  }
+});
+
+/* CLICK NODE → TẠO CẠNH */
+network.on("selectNode", function (params) {
+  if (selectedNode === null) {
+    selectedNode = params.nodes[0];
+  } else {
+    let to = params.nodes[0];
+    if (selectedNode !== to) {
+      edges.add({ from: selectedNode, to: to });
+    }
+    selectedNode = null;
+  }
+});
+
+/* CHUỘT PHẢI → XÓA */
+network.on("oncontext", function (params) {
+  params.event.preventDefault();
+  let nodeId = network.getNodeAt(params.pointer.DOM);
+  let edgeId = network.getEdgeAt(params.pointer.DOM);
+  if (nodeId !== undefined) nodes.remove(nodeId);
+  if (edgeId !== undefined) edges.remove(edgeId);
+});
+</script>
+</body>
+</html>
