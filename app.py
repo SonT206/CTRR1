@@ -3,7 +3,8 @@ import networkx as nx
 from pyvis.network import Network
 import streamlit.components.v1 as components
 
-from lib.Ford_Fulkerson_Animated import ford_fulkerson_steps
+from Ford_Fulkerson_Animated import ford_fulkerson_steps
+
 
 st.set_page_config(layout="wide")
 st.title("🔷 Chương trình Đồ thị Tương tác")
@@ -104,3 +105,4 @@ if st.session_state.ff_steps:
     st.info(
         f"Bước {st.session_state.ff_index+1} / {len(st.session_state.ff_steps)}"
     )
+
